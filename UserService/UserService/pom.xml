@@ -8,16 +8,26 @@
         <version>2.7.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.lcwd.user.service</groupId>
+    <groupId>com.hms.user.service</groupId>
     <artifactId>UserService</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>UserService</name>
     <description>This is user service</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>11</java.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
