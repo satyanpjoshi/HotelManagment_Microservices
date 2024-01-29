@@ -1,6 +1,7 @@
 package com.hms.booking.services;
 
 import com.hms.booking.entites.Booking;
+import com.hms.booking.model.BookingResponseModel;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface BookingService {
     List<Booking> getAll();
 
     //get single
-    Booking get(Long id);
+    BookingResponseModel get(Long id);
 
     Booking update(Booking booking);
 

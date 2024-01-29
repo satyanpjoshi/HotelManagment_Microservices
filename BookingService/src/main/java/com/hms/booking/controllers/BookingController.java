@@ -1,6 +1,7 @@
 package com.hms.booking.controllers;
 
 import com.hms.booking.entites.Booking;
+import com.hms.booking.model.BookingResponseModel;
 import com.hms.booking.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class BookingController {
 
     //get single
     @GetMapping("/{bookingId}")
-    public ResponseEntity<Booking> getBookingById(@PathVariable Long bookingId) {
+    public ResponseEntity<BookingResponseModel> getBookingById(@PathVariable Long bookingId) {
         return ResponseEntity.status(HttpStatus.OK).body(bookingService.get(bookingId));
     }
 

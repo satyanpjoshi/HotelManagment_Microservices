@@ -2,6 +2,11 @@ package com.hms.booking.services.impl;
 
 import com.hms.booking.entites.Booking;
 import com.hms.booking.exceptions.ResourceNotFoundException;
+import com.hms.booking.externalservices.HotelService;
+import com.hms.booking.externalservices.UserService;
+import com.hms.booking.model.BookingResponseModel;
+import com.hms.booking.model.Hotel;
+import com.hms.booking.model.User;
 import com.hms.booking.respositories.BookingRepository;
 import com.hms.booking.services.BookingService;
 import org.springframework.beans.BeanUtils;
@@ -17,6 +22,11 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private HotelService hotelService;
+
+    private UserService userService;
+
     @Override
     public Booking create(Booking booking) {
         return bookingRepository.save(booking);
@@ -28,8 +38,26 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking get(Long id) {
-        return bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("booking with given id not found !!"));
+    public BookingResponseModel get(Long id) {
+        Optional<Booking> bookingOptional = bookingRepository.findById(id);
+        if(bookingOptional.isEmpty())
+            throw new ResourceNotFoundException("Booking not found for ID: "+id);
+        Booking booking = bookingOptional.get();
+        BookingResponseModel bookingResponse = BookingResponseModel.builder()
+                .id(booking.getId())
+                .bookingDate(booking.getBookingDate())
+                .numberOfDays(booking.getNumberOfDays())
+                .build();
+        Optional<Hotel> hotel = hotelService.getHotel(booking.getHotelId());
+        if(hotel.isEmpty())
+            throw new ResourceNotFoundException("Hotel not found for ID: "+ booking.getHotelId());
+        bookingResponse.setHotel(hotel.get());
+
+        Optional<User> customer = userService.getUser(booking.getCustomerId());
+        if (customer.isEmpty())
+            throw new ResourceNotFoundException("Customer not found for ID: "+booking.getCustomerId());
+        bookingResponse.setCustomer(customer.get());
+        return bookingResponse;
     }
 
     @Override
