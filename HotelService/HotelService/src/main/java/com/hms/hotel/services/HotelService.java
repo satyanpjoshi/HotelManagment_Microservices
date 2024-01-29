@@ -14,9 +14,9 @@ public interface HotelService {
     List<Hotel> getAll();
 
     //get single
-    Hotel get(String id);
+    Hotel get(Long id);
 
     Hotel update(Hotel hotel);
 
-    void delete(String hotelId);
+    void delete(Long hotelId);
 }

@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -18,10 +16,13 @@ import javax.persistence.Table;
 public class Hotel {
 
     @Id
-    private  String id;
-    private  String name;
+    @Column(name = "id",nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private  Long id;
+    private  String contactNumber;
+    private Integer numberOfRoomsAvailable;
     private  String location;
-    private  String about;
+    private  String rating;
 
 
 }
