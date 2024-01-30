@@ -20,4 +20,8 @@ public interface BookingService {
     Booking update(Booking booking);
 
     void delete(Long bookingId);
+
+    List<BookingResponseModel> getBookingsByHotelId(Long hotelId);
+
+    List<BookingResponseModel> getBookingsByCustomerId(Long customerId);
 }

@@ -31,6 +31,16 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(bookingService.get(bookingId));
     }
 
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<List<BookingResponseModel>> getBookingsByHotelId(@PathVariable Long hotelId) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookingService.getBookingsByHotelId(hotelId));
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<BookingResponseModel>> getBookingsByCustomerId(@PathVariable Long customerId) {
+        return ResponseEntity.status(HttpStatus.OK).body(bookingService.getBookingsByCustomerId(customerId));
+    }
+
 
     //get all
     @GetMapping

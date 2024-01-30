@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,8 +44,17 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    //get single user
     @Override
+    public User getUser(Long userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if(userOpt.isEmpty())
+            throw new ResourceNotFoundException("User Not found for ID: "+userId);
+        return userOpt.get();
+    }
+
+
+    //get single user
+    /*@Override
     public User getUser(Long userId) {
         //get user from database with the help  of user repository
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User with given id is not found on server !! : " + userId));
@@ -69,7 +79,7 @@ public class UserServiceImpl implements UserService {
         user.setRatings(ratingList);
 
         return user;
-    }
+    }*/
 
     @Override
     public User updateUser(User user) {

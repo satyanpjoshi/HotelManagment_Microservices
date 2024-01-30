@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -25,6 +26,7 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private HotelService hotelService;
 
+    @Autowired
     private UserService userService;
 
     @Override
@@ -47,17 +49,24 @@ public class BookingServiceImpl implements BookingService {
                 .id(booking.getId())
                 .bookingDate(booking.getBookingDate())
                 .numberOfDays(booking.getNumberOfDays())
+                .hotel(getHotel(booking.getHotelId()))
+                .customer(getCustomer(booking.getCustomerId()))
                 .build();
-        Optional<Hotel> hotel = hotelService.getHotel(booking.getHotelId());
-        if(hotel.isEmpty())
-            throw new ResourceNotFoundException("Hotel not found for ID: "+ booking.getHotelId());
-        bookingResponse.setHotel(hotel.get());
-
-        Optional<User> customer = userService.getUser(booking.getCustomerId());
-        if (customer.isEmpty())
-            throw new ResourceNotFoundException("Customer not found for ID: "+booking.getCustomerId());
-        bookingResponse.setCustomer(customer.get());
         return bookingResponse;
+    }
+
+    private User getCustomer(Long customerId) {
+        Optional<User> customer = userService.getUser(customerId);
+        if (customer.isEmpty())
+            throw new ResourceNotFoundException("Customer not found for ID: "+ customerId);
+        return customer.get();
+    }
+
+    private Hotel getHotel(Long hotelId) {
+        Optional<Hotel> hotel = hotelService.getHotel(hotelId);
+        if(hotel.isEmpty())
+            throw new ResourceNotFoundException("Hotel not found for ID: "+ hotelId);
+        return hotel.get();
     }
 
     @Override
@@ -74,5 +83,37 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void delete(Long bookingId) {
         bookingRepository.deleteById(bookingId);
+    }
+
+    @Override
+    public List<BookingResponseModel> getBookingsByHotelId(Long hotelId) {
+        List<Booking> bookingList = bookingRepository.findByHotelId(hotelId);
+
+        return bookingList.stream().map(booking ->
+                     BookingResponseModel.builder()
+                            .id(booking.getId())
+                            .bookingDate(booking.getBookingDate())
+                            .numberOfDays(booking.getNumberOfDays())
+                            .hotel(getHotel(booking.getHotelId()))
+                            .customer(getCustomer(booking.getCustomerId()))
+                            .build()
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookingResponseModel> getBookingsByCustomerId(Long customerId) {
+        List<Booking> bookingList = bookingRepository.findByCustomerId(customerId);
+
+        return bookingList.stream().map(booking ->
+                        BookingResponseModel.builder()
+                                .id(booking.getId())
+                                .bookingDate(booking.getBookingDate())
+                                .numberOfDays(booking.getNumberOfDays())
+                                .hotel(getHotel(booking.getHotelId()))
+                                .customer(getCustomer(booking.getCustomerId()))
+                                .build()
+                )
+                .collect(Collectors.toList());
     }
 }
