@@ -19,4 +19,8 @@ public interface HotelService {
     Hotel update(Hotel hotel);
 
     void delete(Long hotelId);
+
+    boolean areRoomsAvailable(Long hotelId);
+
+    void bookRoom(Long hotelId);
 }

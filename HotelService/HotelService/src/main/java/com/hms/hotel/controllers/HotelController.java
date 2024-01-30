@@ -47,4 +47,14 @@ public class HotelController {
         hotelService.delete(hotelId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    @PostMapping("/checkAvailability/{hotelId}")
+    public boolean checkAvailability(@PathVariable Long hotelId) {
+        return hotelService.areRoomsAvailable(hotelId);
+    }
+
+    @PostMapping("/bookRoom/{hotelId}")
+    public void bookRoom(@PathVariable Long hotelId) {
+        hotelService.bookRoom(hotelId);
+    }
 }

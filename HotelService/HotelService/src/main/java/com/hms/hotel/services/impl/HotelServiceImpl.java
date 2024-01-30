@@ -48,4 +48,15 @@ public class HotelServiceImpl implements HotelService {
     public void delete(Long hotelId) {
         hotelRepository.deleteById(hotelId);
     }
+
+    @Override
+    public boolean areRoomsAvailable(Long hotelId) {
+        Hotel hotel = hotelRepository.findById(hotelId).orElse(null);
+        return hotel != null && hotel.getNumberOfRoomsAvailable() > 0;
+    }
+
+    @Override
+    public void bookRoom(Long hotelId) {
+        hotelRepository.bookRoom(hotelId);
+    }
 }

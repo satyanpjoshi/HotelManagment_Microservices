@@ -21,6 +21,7 @@ public class Hotel {
     private  Long id;
     private  String contactNumber;
     private Integer numberOfRoomsAvailable;
+    private Integer totalRooms;
     private  String location;
     private  String rating;
 

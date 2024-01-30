@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,7 +31,11 @@ public class BookingServiceImpl implements BookingService {
     private UserService userService;
 
     @Override
+    @Transactional
     public Booking create(Booking booking) {
+        if(!hotelService.checkAvailability(booking.getHotelId()))
+            throw new ResourceNotFoundException("Rooms not available!");
+        hotelService.bookRoom(booking.getHotelId());
         return bookingRepository.save(booking);
     }
 
